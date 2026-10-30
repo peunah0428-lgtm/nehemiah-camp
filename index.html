@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>2027 느헤미야 캠프 참석 조사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+<style>
+/* Layout: single column — form card, then summary + response list (visible to editors only) */
+:root{
+  --bg:#f3f4f6; --surface:#ffffff; --ink:#1b2433; --muted:#5d6878; --line:#d9dde4;
+  --accent:#2c4a7a; --accent-ink:#ffffff; --stone:#b9a689;
+  --yes:#2f7a52; --maybe:#b07a1d; --no:#a2453b;
+  --display:"Gowun Batang",Georgia,serif;
+  --body:"IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12161d; --surface:#1b212b; --ink:#e7eaef; --muted:#9aa4b2; --line:#2e3644;
+  --accent:#8fb0e6; --accent-ink:#0f1520; --stone:#8a7a62;
+  --yes:#6cc196; --maybe:#e0b25a; --no:#e08479; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161d; --surface:#1b212b; --ink:#e7eaef; --muted:#9aa4b2; --line:#2e3644;
+  --accent:#8fb0e6; --accent-ink:#0f1520; --stone:#8a7a62;
+  --yes:#6cc196; --maybe:#e0b25a; --no:#e08479; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+.wrap{max-width:680px;margin:0 auto;padding-block:32px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:28px}
+header{display:flex;flex-direction:column;gap:6px}
+.wall{height:10px;background:
+  repeating-linear-gradient(90deg,var(--stone) 0 34px,transparent 34px 37px);opacity:.55;border-radius:2px;margin-bottom:10px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-size:clamp(26px,6vw,34px);line-height:1.25;margin:0;text-wrap:balance}
+.meta{color:var(--muted);font-variant-numeric:tabular-nums}
+.lede{margin:6px 0 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:24px}
+.q{display:flex;flex-direction:column;gap:8px;border:0;margin:0;padding:0;min-width:0}
+.q label.title,.q legend{font-weight:600;padding:0}
+.req{color:var(--no);margin-left:2px}
+.hint{color:var(--muted);font-size:13px;margin:-4px 0 2px}
+input[type=text],textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;box-sizing:border-box}
+textarea{min-height:92px;resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible,.opt input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer}
+.opt:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.opt input{accent-color:var(--accent);margin:0}
+.q.dim{opacity:.55}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:11px 20px;cursor:pointer;background:var(--accent);color:var(--accent-ink)}
+button:disabled{opacity:.5;cursor:default}
+button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);padding:6px 10px;font-weight:500;font-size:13px}
+.status{font-size:14px;color:var(--muted)}
+.status.err{color:var(--no)}
+.status.ok{color:var(--yes)}
+.done{text-align:center;padding:36px 24px;gap:12px}
+.done h2{font-family:var(--display);margin:0;font-size:22px}
+section.results{display:flex;flex-direction:column;gap:16px}
+h2.sec{font-family:var(--display);font-size:20px;margin:0}
+.tally{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.t{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:2px}
+.t b{font-size:22px;font-variant-numeric:tabular-nums}
+.t span{font-size:12px;color:var(--muted)}
+.t.yes b{color:var(--yes)} .t.maybe b{color:var(--maybe)} .t.no b{color:var(--no)}
+.bar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--line)}
+.bar i{display:block}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{background:transparent;color:var(--muted);border:1px solid var(--line);padding:5px 12px;font-weight:500;font-size:13px;border-radius:999px}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.list{display:flex;flex-direction:column;gap:10px}
+.row{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.row-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.row-top strong{font-size:16px}
+.pill{font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid currentColor}
+.pill.yes{color:var(--yes)} .pill.maybe{color:var(--maybe)} .pill.no{color:var(--no)}
+.when{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.row p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.row .lbl{font-size:12px;color:var(--muted);letter-spacing:.04em;display:block}
+.empty{color:var(--muted);text-align:center;padding:24px;border:1px dashed var(--line);border-radius:8px}
+.confirm{display:flex;gap:8px;align-items:center;font-size:13px}
+.confirm button.del{background:var(--no);color:#fff;padding:5px 10px;font-size:13px}
+@media (max-width:480px){.tally{grid-template-columns:repeat(2,1fr)}.card{padding:18px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="wall" aria-hidden="true"></div>
+    <span class="eyebrow">하의재 청소년 캠프</span>
+    <h1>2027 느헤미야 청소년 캠프</h1>
+    <div class="meta">2027년 1월 11일(월) ~ 13일(수) · 강화성산예수마을</div>
+    <p class="lede">캠프 참석 가능 여부를 알려주세요. 아직 고민 중이어도 편하게 응답해 주세요!</p>
+  </header>
+
+  <form id="form" class="card" novalidate>
+    <div class="q">
+      <label class="title" for="name">1. 이름<span class="req" aria-hidden="true">*</span></label>
+      <input type="text" id="name" name="name" autocomplete="name" placeholder="이름을 입력해 주세요." required>
+    </div>
+
+    <fieldset class="q">
+      <legend>2. 캠프에 참석할 수 있나요?<span class="req" aria-hidden="true">*</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" id="att-yes" name="attend" value="yes"><span>갈 수 있어요!</span></label>
+        <label class="opt"><input type="radio" id="att-maybe" name="attend" value="maybe"><span>생각해 볼게요.</span></label>
+        <label class="opt"><input type="radio" id="att-no" name="attend" value="no"><span>참석하기 어려워요.</span></label>
+      </div>
+    </fieldset>
+
+    <div class="q" id="q3">
+      <label class="title" for="reason">3. 참석을 고민하거나 어려워하는 이유가 있나요?</label>
+      <p class="hint">2번에서 ‘생각해 볼게요’ 또는 ‘참석하기 어려워요’를 선택한 경우 작성해 주세요.</p>
+      <textarea id="reason" name="reason"></textarea>
+    </div>
+
+    <div class="q">
+      <label class="title" for="hope">4. 캠프 소개를 들으니 무엇이 기대되나요?</label>
+      <p class="hint">기대되는 프로그램이나 경험, 궁금한 점을 자유롭게 적어 주세요.</p>
+      <textarea id="hope" name="hope"></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="submit" id="submit">제출하기</button>
+      <span class="status" id="status" role="status"></span>
+    </div>
+  </form>
+
+  <div class="card done" id="done" hidden>
+    <h2>응답이 전달됐어요</h2>
+    <p id="done-msg" style="margin:0;color:var(--muted)">함께 고민해 줘서 고마워요.</p>
+    <div><button type="button" id="again">새 응답 입력하기</button></div>
+  </div>
+
+  </div>
+
+<script>
+// 구글 Apps Script 웹 앱 주소 (README의 2단계에서 받은 주소로 바꿔 주세요)
+const SCRIPT_URL = "PASTE_APPS_SCRIPT_URL_HERE";
+
+const $=id=>document.getElementById(id);
+const form=$("form"),statusEl=$("status"),btn=$("submit");
+function setStatus(t,cls=""){statusEl.textContent=t;statusEl.className="status "+cls}
+function attendVal(){const r=form.querySelector('input[name=attend]:checked');return r?r.value:""}
+function syncQ3(){$("q3").classList.toggle("dim",attendVal()==="yes")}
+form.addEventListener("change",syncQ3);
+const LABEL={yes:"갈 수 있어요!",maybe:"생각해 볼게요.",no:"참석하기 어려워요."};
+
+form.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=$("name").value.trim(),attend=attendVal();
+  if(!name){setStatus("이름을 입력해 주세요.","err");$("name").focus();return}
+  if(!attend){setStatus("참석 여부를 선택해 주세요.","err");$("att-yes").focus();return}
+  if(SCRIPT_URL.startsWith("PASTE")){setStatus("아직 응답 저장소가 연결되지 않았어요.","err");return}
+  btn.disabled=true;setStatus("보내는 중…");
+  try{
+    const body=new URLSearchParams({name,attend:LABEL[attend],reason:$("reason").value.trim(),hope:$("hope").value.trim()});
+    await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",body});
+    form.reset();syncQ3();setStatus("");
+    form.hidden=true;$("done").hidden=false;
+  }catch(err){
+    setStatus("보내지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.","err");
+  }finally{btn.disabled=false}
+});
+$("again").addEventListener("click",()=>{$("done").hidden=true;form.hidden=false;$("name").focus()});
+</script>
+</body>
+</html>
