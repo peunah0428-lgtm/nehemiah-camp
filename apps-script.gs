@@ -1,11 +1,12 @@
 // 2027 느헤미야 청소년 캠프 참석 조사 — 응답을 구글 스프레드시트에 저장합니다.
-// 스프레드시트의 [확장 프로그램 > Apps Script]에 이 코드를 붙여 넣고 웹 앱으로 배포하세요.
+// 실제 배포본은 Apps Script 프로젝트 '느헤미야 캠프 응답 수집'에 있으며, 스프레드시트 ID로 시트를 엽니다.
 
+const SPREADSHEET_ID = "1VCLYck6C8KG-hTQpLj3CN7kYNoLjPx6RH2EqtYe3yKo";
 const SHEET_NAME = "응답";
 const HEADERS = ["제출 시각", "이름", "참석 여부", "고민·어려운 이유", "기대되는 점"];
 
 function doPost(e) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
