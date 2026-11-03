@@ -102,24 +102,17 @@ h2.sec{font-family:var(--display);font-size:20px;margin:0}
     </div>
 
     <fieldset class="q">
-      <legend>2. 캠프에 참석할 수 있나요?<span class="req" aria-hidden="true">*</span></legend>
+      <legend>2. 캠프 참여 결정 여부를 알려주세요.<span class="req" aria-hidden="true">*</span></legend>
       <div class="opts">
-        <label class="opt"><input type="radio" id="att-yes" name="attend" value="yes"><span>갈 수 있어요!</span></label>
-        <label class="opt"><input type="radio" id="att-maybe" name="attend" value="maybe"><span>생각해 볼게요.</span></label>
-        <label class="opt"><input type="radio" id="att-no" name="attend" value="no"><span>참석하기 어려워요.</span></label>
+        <label class="opt"><input type="radio" id="att-yes" name="attend" value="yes"><span>a. Yes</span></label>
+        <label class="opt"><input type="radio" id="att-no" name="attend" value="no"><span>b. No</span></label>
+        <label class="opt"><input type="radio" id="att-notyet" name="attend" value="notyet"><span>c. Not yet</span></label>
       </div>
     </fieldset>
 
     <div class="q" id="q3">
-      <label class="title" for="reason">3. 참석을 고민하거나 어려워하는 이유가 있나요?</label>
-      <p class="hint">2번에서 ‘생각해 볼게요’ 또는 ‘참석하기 어려워요’를 선택한 경우 작성해 주세요.</p>
+      <label class="title" for="reason">3. b, c인 경우 이유를 남겨주세요.</label>
       <textarea id="reason" name="reason"></textarea>
-    </div>
-
-    <div class="q">
-      <label class="title" for="hope">4. 캠프 소개를 들으니 무엇이 기대되나요?</label>
-      <p class="hint">기대되는 프로그램이나 경험, 궁금한 점을 자유롭게 적어 주세요.</p>
-      <textarea id="hope" name="hope"></textarea>
     </div>
 
     <div class="actions">
@@ -146,7 +139,7 @@ function setStatus(t,cls=""){statusEl.textContent=t;statusEl.className="status "
 function attendVal(){const r=form.querySelector('input[name=attend]:checked');return r?r.value:""}
 function syncQ3(){$("q3").classList.toggle("dim",attendVal()==="yes")}
 form.addEventListener("change",syncQ3);
-const LABEL={yes:"갈 수 있어요!",maybe:"생각해 볼게요.",no:"참석하기 어려워요."};
+const LABEL={yes:"Yes",no:"No",notyet:"Not yet"};
 
 form.addEventListener("submit",async e=>{
   e.preventDefault();
@@ -156,7 +149,7 @@ form.addEventListener("submit",async e=>{
   if(SCRIPT_URL.startsWith("PASTE")){setStatus("아직 응답 저장소가 연결되지 않았어요.","err");return}
   btn.disabled=true;setStatus("보내는 중…");
   try{
-    const body=new URLSearchParams({name,attend:LABEL[attend],reason:$("reason").value.trim(),hope:$("hope").value.trim()});
+    const body=new URLSearchParams({name,attend:LABEL[attend],reason:$("reason").value.trim()});
     await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",body});
     form.reset();syncQ3();setStatus("");
     form.hidden=true;$("done").hidden=false;
